@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nestedScrollView"
     android:layout_width="match_parent"
@@ -51,15 +52,44 @@
             android:id="@+id/appCompatButtonLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="@android:color/white"
             android:layout_marginTop="40dp"
             android:text="@string/text_login" />
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/textViewLinkRegister"
-            android:layout_width="fill_parent"
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/appCompatButtonForgot"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:gravity="center"
-            android:text="@string/text_not_member"
-            android:textSize="16sp" />
+            android:layout_marginTop="20dp"
+            android:text="@string/text_forgot" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="20dp">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textViewRegister"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/text_not_member"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.20"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteY="30dp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textViewLinkRegister"
+                android:layout_width="125dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/text_not_member_click"
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textViewRegister" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.core.widget.NestedScrollView>
