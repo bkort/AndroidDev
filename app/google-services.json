@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "764381294083",
+    "project_id": "unified-blood-donation",
+    "storage_bucket": "unified-blood-donation.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:764381294083:android:b2e14f8c63b4e500b86836",
+        "android_client_info": {
+          "package_name": "com.example.unifiedblooddonor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "764381294083-e6u2i1uljgphip21s91c7folg2ltmf19.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpLRcDjMy2M8g6DtQtyazuZUDF8uNvv9A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "764381294083-e6u2i1uljgphip21s91c7folg2ltmf19.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

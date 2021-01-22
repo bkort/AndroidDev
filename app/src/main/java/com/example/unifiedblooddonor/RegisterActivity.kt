@@ -10,12 +10,13 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.widget.NestedScrollView
-import com.example.unifiedblooddonor.database.DataManager
-import com.example.unifiedblooddonor.helpers.InputValidation
-import com.example.unifiedblooddonor.modal.User
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+
 
 class RegisterActivity : AppCompatActivity(), View.OnClickListener,
     AdapterView.OnItemSelectedListener {
@@ -36,8 +37,8 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener,
     private lateinit var textInputEditTextConfirmPassword: TextInputEditText
     private lateinit var appCompatButtonRegister: AppCompatButton
     private lateinit var appCompatTextViewLoginLink: AppCompatTextView
-    private lateinit var inputValidation: InputValidation
-    private lateinit var databaseHelper: DataManager
+    private lateinit var auth: FirebaseAuth
+
     private lateinit var bloodSpinner: AppCompatSpinner
     private var bloodTypes = arrayOf("Select Blood Type", "A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-")
 
@@ -58,23 +59,23 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener,
      * This method is to initialize views
      */
     private fun initViews() {
-        nestedScrollView = findViewById<NestedScrollView>(R.id.nestedScrollView)
-        textInputLayoutName = findViewById<TextInputLayout>(R.id.textInputLayoutName)
-        textInputLayoutAddress = findViewById<TextInputLayout>(R.id.textInputLayoutAddress)
-        textInputLayoutDOB = findViewById<TextInputLayout>(R.id.textInputLayoutDOB)
-        textInputLayoutBloodType = findViewById<TextInputLayout>(R.id.textInputLayoutBloodType)
-        textInputLayoutEmail = findViewById<TextInputLayout>(R.id.textInputLayoutEmail)
-        textInputLayoutPassword = findViewById<TextInputLayout>(R.id.textInputLayoutPassword)
-        textInputLayoutConfirmPassword = findViewById<TextInputLayout>(R.id.textInputLayoutConfirmPassword)
-        textInputEditTextName = findViewById<TextInputEditText>(R.id.textInputEditTextName)
-        textInputEditTextAddress = findViewById<TextInputEditText>(R.id.textInputEditTextAddress)
-        textInputEditTextDOB = findViewById<TextInputEditText>(R.id.textInputEditTextDOB)
-        textInputEditTextEmail = findViewById<TextInputEditText>(R.id.textInputEditTextEmail)
-        textInputEditTextPassword = findViewById<TextInputEditText>(R.id.textInputEditTextPassword)
-        textInputEditTextConfirmPassword = findViewById<TextInputEditText>(R.id.textInputEditTextConfirmPassword)
-        appCompatButtonRegister = findViewById<AppCompatButton>(R.id.appCompatButtonRegister)
-        appCompatTextViewLoginLink = findViewById<AppCompatTextView>(R.id.appCompatTextViewLoginLink)
-        bloodSpinner = findViewById<AppCompatSpinner>(R.id.spinnerBloodType)
+        nestedScrollView = findViewById(R.id.nestedScrollView)
+        textInputLayoutName = findViewById(R.id.textInputLayoutName)
+        textInputLayoutAddress = findViewById(R.id.textInputLayoutAddress)
+        textInputLayoutDOB = findViewById(R.id.textInputLayoutDOB)
+        textInputLayoutBloodType = findViewById(R.id.textInputLayoutBloodType)
+        textInputLayoutEmail = findViewById(R.id.textInputLayoutEmail)
+        textInputLayoutPassword = findViewById(R.id.textInputLayoutPassword)
+        textInputLayoutConfirmPassword = findViewById(R.id.textInputLayoutConfirmPassword)
+        textInputEditTextName = findViewById(R.id.textInputEditTextName)
+        textInputEditTextAddress = findViewById(R.id.textInputEditTextAddress)
+        textInputEditTextDOB = findViewById(R.id.textInputEditTextDOB)
+        textInputEditTextEmail = findViewById(R.id.textInputEditTextEmail)
+        textInputEditTextPassword = findViewById(R.id.textInputEditTextPassword)
+        textInputEditTextConfirmPassword = findViewById(R.id.textInputEditTextConfirmPassword)
+        appCompatButtonRegister = findViewById(R.id.appCompatButtonRegister)
+        appCompatTextViewLoginLink = findViewById(R.id.appCompatTextViewLoginLink)
+        bloodSpinner = findViewById(R.id.spinnerBloodType)
     }
     private fun spinnterInit(){
         val aa = ArrayAdapter(this, android.R.layout.simple_spinner_item, bloodTypes)
@@ -94,59 +95,19 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener,
      * This method is to initialize objects to be used
      */
     private fun initObjects() {
-        inputValidation = InputValidation(activity)
-        databaseHelper = DataManager(activity)
+        auth = Firebase.auth
     }
+
+
     /**
      * This implemented method is to listen the click on view
      *
      * @param v
      */
     override fun onClick(v: View) {
-        when (v.id) {
-            R.id.appCompatButtonRegister -> postDataToSQLite()
-            R.id.appCompatTextViewLoginLink -> finish()
-        }
+
     }
-    /**
-     * This method is to validate the input text fields and post data to SQLite
-     */
-    private fun postDataToSQLite() {
-        if (!inputValidation.isInputEditTextFilled(textInputEditTextName, textInputLayoutName, getString(R.string.error_message_name))) {
-            return
-        }
-        if (!inputValidation.isInputSpinnerFilled(bloodSpinner.selectedItemPosition, textInputLayoutBloodType, getString(R.string.error_message_blood_type))) {
-            return
-        }
-        if (!inputValidation.isInputEditTextFilled(textInputEditTextEmail, textInputLayoutEmail, getString(R.string.error_message_email))) {
-            return
-        }
-        if (!inputValidation.isInputEditTextEmail(textInputEditTextEmail, textInputLayoutEmail, getString(R.string.error_message_email))) {
-            return
-        }
-        if (!inputValidation.isInputEditTextFilled(textInputEditTextPassword, textInputLayoutPassword, getString(R.string.error_message_password))) {
-            return
-        }
-        if (!inputValidation.isInputEditTextMatches(textInputEditTextPassword, textInputEditTextConfirmPassword,
-                textInputLayoutConfirmPassword, getString(R.string.error_password_match))) {
-            return
-        }
-        if (!databaseHelper.checkUser(textInputEditTextEmail.text.toString().trim())) {
-            var user = User(name = textInputEditTextName.text.toString().trim(),
-                email = textInputEditTextEmail.text.toString().trim(),
-                pass = textInputEditTextPassword.text.toString().trim(),
-                address = textInputEditTextAddress.text.toString().trim(),
-                dob = textInputEditTextDOB.text.toString().trim(),
-                btype = bloodSpinner.selectedItem.toString())
-            databaseHelper.addUser(user)
-            // Snack Bar to show success message that record saved successfully
-            val intentRegister = Intent(applicationContext, HomeActivity::class.java)
-            startActivity(intentRegister)
-        } else {
-            // Snack Bar to show error message that record already exists
-            Snackbar.make(nestedScrollView, getString(R.string.error_email_exists), Snackbar.LENGTH_LONG).show()
-        }
-    }
+
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
 
